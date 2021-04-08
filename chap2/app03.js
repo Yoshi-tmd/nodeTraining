@@ -1,5 +1,8 @@
 const http = require('http');
 const fs = require('fs');
+const ejs = require('ejs');
+
+const index_page = fs.readFileSync('./index.ejs', 'utf8');
 
 let server = http.createServer(getFromClient);
 
@@ -10,10 +13,8 @@ console.log('Server running on port 3000.');
 
  // createServerの処理
 function getFromClient(req, res) {
-    fs.readFile('./index.html', 'UTF-8', 
-        (error, data) => {
-            res.writeHead(200, { 'Content-type': 'text/html' });
-            res.write(data);
-            res.end();
-    });
+    let content = ejs.render(index_page);
+    res.writeHead(200, { 'Content-type': 'text/html' });
+    res.write(content);
+    res.end();
 }
