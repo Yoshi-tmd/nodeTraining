@@ -6,12 +6,20 @@ const qs = require('querystring');
 
 const index_page = fs.readFileSync('./index.ejs', 'utf8');
 const other_page = fs.readFileSync('./other.ejs', 'utf8');
+const phoneList_page = fs.readFileSync('./phoneList.ejs', 'utf8');
 const style_css = fs.readFileSync('./style.css', 'utf8');
 
 let server = http.createServer(getFormClient);
 
 server.listen(3000);
 console.log('Server running on port 3000.');
+
+let phoneNumlist = {
+    'Yoshinori': '090-1234-5678',
+    'Moe': '080-9876-5432',
+    'Oden': '090-1357-2468',
+    'Daifuku': '090-9753-8642'
+};
 
 // createServerの処理
 function getFormClient(req, res){
@@ -24,6 +32,10 @@ function getFormClient(req, res){
 
         case '/other':
             responseOther(req, res);
+            break;
+        
+        case '/phoneList':
+            responsePhoneList(req, res);
             break;
 
         case '/style.css':
@@ -88,4 +100,18 @@ function responseOther(req, res){
         res.write(content);
         res.end();
     }
+}
+
+// phoneListのアクセス処理
+function responsePhoneList(req, res){
+    let text = "電話番号のリストです。";
+    let content = ejs.render(phoneList_page, {
+        title: "Phone Number List",
+        content: text,
+        data: phoneNumlist,
+        filename: 'data_item'
+    });
+    res.writeHead(200, { 'Content-type': 'text/html' });
+    res.write(content);
+    res.end();
 }
