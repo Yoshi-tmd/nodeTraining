@@ -14,16 +14,19 @@ console.log('Server running on port 3000.');
 
 // createServerの処理
 function getFormClient(req, res){
-    console.log(req.url);
-    let url_parts = url.parse(req.url);
-    console.log(url_parts);
+    let url_parts = url.parse(req.url, true);
 
     switch (url_parts.pathname){
-
         case '/':
+            let text = "これはIndexページです。";
+            let query = url_parts.query;
+            if(query.msg != undefined){
+                text += "あなたは、「" + query.msg + "」と送りました。";
+                console.log(text);
+            }
             let content = ejs.render(index_page, {
                 title: "Index",
-                content: "これはテンプレートを使ったサンプルページです。",
+                content: text,
             });
             res.writeHead(200, { 'Content-type': 'text/html' });
             res.write(content);
@@ -40,17 +43,15 @@ function getFormClient(req, res){
             res.end();
             break;
 
-        // case '/style.css':
-        //     res.writeHead(200, { 'Content-type': 'text/css' });
-        //     res.write(style_css);
-        //     res.end();
-        //     break;
+        case '/style.css':
+            res.writeHead(200, { 'Content-type': 'text/css' });
+            res.write(style_css);
+            res.end();
+            break;
 
         default:
             res.writeHead(200, { 'Content-type': 'text/plain' });
             res.end('No page...');
             break;
     }
-        
-
 }
