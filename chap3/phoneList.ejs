@@ -13,12 +13,10 @@
     </header>
     <div role="main">
         <p><%= content %></p>
-        <table class="table">
-            <% let id = 0; %>
-            <% for (let key in data) { %>
-            <%- include('data_item', {id:++id, key:key, val:[data[key]]}) %>>
-            <% } %>
-        </table>
+        <% let id = 0; %>
+        <% for (let key in data) { %>
+        <%- include('data_item', {id:++id, key:key, val:[data[key]]}) %>
+        <% } %>
     </div>
 </body>
 </html>
